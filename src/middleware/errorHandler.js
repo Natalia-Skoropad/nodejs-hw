@@ -1,13 +1,21 @@
+import { HttpError } from 'http-errors';
+
+//======================================================================
+
 export const errorHandler = (err, req, res, next) => {
   console.error('Error Middleware:', err);
 
-  const status = err.status || err.statusCode || 500;
+  if (err instanceof HttpError) {
+    return res.status(err.status).json({
+      message: err.message || err.name,
+    });
+  }
+
   const isProd = process.env.NODE_ENV === 'production';
 
-  res.status(status).json({
-    message:
-      status === 500 && isProd
-        ? 'Something went wrong. Please try again later.'
-        : err.message || 'Internal Server Error',
+  res.status(500).json({
+    message: isProd
+      ? 'Something went wrong. Please try again later.'
+      : err.message,
   });
 };
