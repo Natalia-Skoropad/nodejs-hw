@@ -77,8 +77,5 @@ export const getAllNotesSchema = {
 
     tag: Joi.string().valid(...TAGS),
     search: Joi.string().trim().allow(''),
-
-    sortBy: Joi.string().valid('_id', 'title', 'tag').default('_id'),
-    sortOrder: Joi.string().valid('asc', 'desc').default('asc'),
   }),
 };
